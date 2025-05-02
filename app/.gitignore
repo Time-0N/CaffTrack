@@ -1,0 +1,24 @@
+# === Build ===
+build/
+captures/
+.externalNativeBuild/
+*.apk
+*.ap_
+
+# === Kotlin / Java ===
+*.class
+*.dex
+*.kotlin_module
+*.log
+
+# === IntelliJ IDEA ===
+*.iml
+
+# === NDK ===
+obj/
+
+# === Compose & tooling ===
+*.kotlin_tooling_metadata.json
+
+# === ProGuard ===
+proguard/

@@ -1,0 +1,31 @@
+# === Gradle ===
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+
+# === IDE files ===
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# === Android Studio ===
+.local/
+.local.properties
+*.log
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Keystore / Signing ===
+*.jks
+*.keystore
+*.key
+*.pem
+
+# === Crashlytics / Firebase ===
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
