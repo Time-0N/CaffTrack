@@ -1,18 +1,18 @@
 package com.example.cafftrack.model.dao
 
 import androidx.room.*
-import com.example.cafftrack.model.entity.CaffeineEntry
+import com.example.cafftrack.model.entity.CaffeineEntryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CaffeineEntryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(entry: CaffeineEntry)
+    suspend fun insert(entry: CaffeineEntryEntity)
 
     @Delete
-    suspend fun delete(entry: CaffeineEntry)
+    suspend fun delete(entry: CaffeineEntryEntity)
 
     @Query("SELECT * FROM caffeine_entries ORDER BY timestamp DESC")
-    fun getAll(): Flow<List<CaffeineEntry>>
+    fun getAll(): Flow<List<CaffeineEntryEntity>>
 }

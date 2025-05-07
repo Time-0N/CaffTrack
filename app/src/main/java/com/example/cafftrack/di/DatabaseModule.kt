@@ -4,13 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import com.example.cafftrack.model.AppDatabase
 import com.example.cafftrack.model.dao.CaffeineEntryDao
-import com.example.cafftrack.repository.CaffeineRepository
+import com.example.cafftrack.model.dao.UserProfileDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
+
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -32,7 +33,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideRepository(dao: CaffeineEntryDao): CaffeineRepository {
-        return CaffeineRepository(dao)
+    fun provideUserProfileDao(db: AppDatabase): UserProfileDao {
+        return db.userProfileDao()
     }
 }

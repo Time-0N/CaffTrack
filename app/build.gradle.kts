@@ -4,7 +4,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.kapt")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -61,7 +60,6 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3.android)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime.android)
     testImplementation(libs.junit)
@@ -76,5 +74,5 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
-    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.compose.animation)
 }

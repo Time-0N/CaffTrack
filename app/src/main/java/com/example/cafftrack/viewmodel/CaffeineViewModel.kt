@@ -2,23 +2,36 @@ package com.example.cafftrack.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cafftrack.model.entity.CaffeineEntry
+import com.example.cafftrack.model.entity.CaffeineEntryEntity
+import com.example.cafftrack.model.entity.UserProfileEntity
+import com.example.cafftrack.model.enums.Sex
 import com.example.cafftrack.repository.CaffeineRepository
+import com.example.cafftrack.repository.UserProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CaffeineViewModel @Inject constructor(
-    private val repository: CaffeineRepository
+    private val caffeineRepository: CaffeineRepository,
+    private val userProfileRepository: UserProfileRepository
 ) : ViewModel() {
 
-    val caffeineEntries: StateFlow<List<CaffeineEntry>> =
-        repository.getAllEntries()
+    val getProfile: StateFlow<UserProfileEntity?> =
+        userProfileRepository.getProfile()
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+
+    fun saveProfile(weightKg: Int, sex: Sex) {
+        viewModelScope.launch {
+            userProfileRepository.insertOrUpdateProfile(
+                UserProfileEntity(id = 0, weightKg = weightKg, sex = sex)
+            )
+        }
+    }
+
+    val caffeineEntries: StateFlow<List<CaffeineEntryEntity>> =
+        caffeineRepository.getAllEntries()
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     val todayCaffeine: StateFlow<Int> =
@@ -46,19 +59,33 @@ class CaffeineViewModel @Inject constructor(
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
-    fun insert(entry: CaffeineEntry) {
+    fun insert(entry: CaffeineEntryEntity) {
         viewModelScope.launch {
-            repository.insert(entry)
+            caffeineRepository.insert(entry)
         }
     }
 
     fun insertEntry(name: String, caffeineMg: Int) {
-        insert(CaffeineEntry(name = name, caffeineMg = caffeineMg))
+        insert(CaffeineEntryEntity(name = name, caffeineMg = caffeineMg))
     }
 
-    fun delete(entry: CaffeineEntry) {
+    fun delete(entry: CaffeineEntryEntity) {
         viewModelScope.launch {
-            repository.delete(entry)
+            caffeineRepository.delete(entry)
         }
     }
+
+    val currentCaffeineInBlood: StateFlow<Double> =
+        combine(caffeineEntries, getProfile) { entries, user ->
+            if (user == null) {
+                -1.0
+            } else {
+                val now = System.currentTimeMillis()
+                entries.sumOf { entry ->
+                    val hours = (now - entry.timestamp) / (1000 * 60 * 60).toDouble()
+                    val halfLife = if (user.sex == Sex.Male) 5.0 else 6.0
+                    entry.caffeineMg * Math.pow(0.5, hours / halfLife)
+                }
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), -1.0)
 }
