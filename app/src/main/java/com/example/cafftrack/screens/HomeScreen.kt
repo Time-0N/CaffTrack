@@ -16,7 +16,10 @@ import com.example.cafftrack.model.enums.Sex
 
 
 @Composable
-fun HomeScreen(viewModel: CaffeineViewModel = hiltViewModel()) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CaffeineViewModel = hiltViewModel()
+) {
     var name by remember { mutableStateOf("") }
     var caffeineMg by remember { mutableStateOf("") }
     var showProfileDialog by remember { mutableStateOf(false) }

@@ -39,7 +39,10 @@ import java.util.Date
 import kotlin.math.abs
 
 @Composable
-fun LogScreen(viewModel: CaffeineViewModel = hiltViewModel()) {
+fun LogScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CaffeineViewModel = hiltViewModel()
+) {
     val entries by viewModel.caffeineEntries.collectAsState()
 
     LazyColumn(

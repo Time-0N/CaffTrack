@@ -41,11 +41,11 @@ fun MainScreen() {
                 }
             }
         }
-    ) {
+    ) { innerPadding ->
         when (selectedTabIndex) {
-            0 -> HomeScreen()
-            1 -> LogScreen()
-            2 -> StatsScreen()
+            0 -> HomeScreen(modifier = Modifier.padding(innerPadding))
+            1 -> LogScreen(modifier = Modifier.padding(innerPadding))
+            2 -> StatsScreen(modifier = Modifier.padding(innerPadding))
         }
     }
 }

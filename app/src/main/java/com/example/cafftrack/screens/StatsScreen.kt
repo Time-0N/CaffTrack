@@ -10,7 +10,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cafftrack.viewmodel.CaffeineViewModel
 
 @Composable
-fun StatsScreen(viewModel: CaffeineViewModel = hiltViewModel()) {
+fun StatsScreen(
+    modifier: Modifier = Modifier,
+    viewModel: CaffeineViewModel = hiltViewModel()
+) {
     val average by viewModel.averageCaffeineLast7Days.collectAsState()
 
     Column(

@@ -74,5 +74,6 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.compiler)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.compose.animation)
 }
