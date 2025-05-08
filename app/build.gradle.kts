@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,15 +8,22 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
 }
 
+val props = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) {
+        file.inputStream().use { load(it) }
+    }
+}
+
 android {
-    namespace = "com.example.cafftrack"
+    namespace = "ch.timeon.cafftrack"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.cafftrack"
+        applicationId = "ch.timeon.cafftrack"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -44,6 +53,21 @@ android {
         kotlinCompilerExtensionVersion = "2.0.0"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = props["RELEASE_STORE_FILE"]?.let { rootProject.file(it as String) }
+            storePassword = props["RELEASE_STORE_PASSWORD"] as String?
+            keyAlias = props["RELEASE_KEY_ALIAS"] as String?
+            keyPassword = props["RELEASE_KEY_PASSWORD"] as String?
+        }
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
 }
 
 kapt {

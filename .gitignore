@@ -3,6 +3,7 @@
 build/
 !gradle/wrapper/gradle-wrapper.jar
 gradle-app.setting
+local.properties
 
 # === IDE files ===
 .idea/
@@ -29,3 +30,6 @@ Thumbs.db
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# Ignore keystore files
+keystore/my-release-key.keystore
