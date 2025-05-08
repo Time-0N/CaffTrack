@@ -45,77 +45,13 @@ fun LogScreen(
 ) {
     val entries by viewModel.caffeineEntries.collectAsState()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        items(entries, key = { it.id }) { entry ->
-            var swipeOffset by remember { mutableFloatStateOf(0f) }
-            var isDismissed by remember { mutableStateOf(false) }
-
-            if (!isDismissed) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .animateDismissal(isDismissed = isDismissed, containerWidth = 200.dp)
-                ) {
-                    // Delete background
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(MaterialTheme.colorScheme.errorContainer)
-                            .padding(16.dp),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Delete",
-                            tint = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                    }
-
-                    // Swipeable content
-                    Box(
-                        modifier = Modifier
-                            .offset(x = swipeOffset.dp)
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.surface)
-                            .pointerInput(Unit) {
-                                detectHorizontalDragGestures { change, dragAmount ->
-                                    swipeOffset += dragAmount
-                                    if (abs(swipeOffset) > size.width * 0.6) {
-                                        isDismissed = true
-                                        viewModel.delete(entry)
-                                    }
-                                }
-                            }
-                    ) {
-                        ListItem(
-                            headlineContent = { Text(entry.name) },
-                            supportingContent = { Text("${entry.caffeineMg}mg @ ${Date(entry.timestamp)}") }
-                        )
-                    }
-                }
-            }
-
-            Divider(
-                color = MaterialTheme.colorScheme.outlineVariant,
-                thickness = 1.dp,
-                modifier = Modifier.padding(vertical = 4.dp)
+    LazyColumn {
+        items(entries) { entry ->
+            ListItem(
+                headlineContent = { Text(entry.name) },
+                supportingContent = { Text("${entry.caffeineMg}mg @ ${Date(entry.timestamp)}") }
             )
+            Divider()
         }
     }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-fun Modifier.animateDismissal(isDismissed: Boolean, containerWidth: Dp) = composed {
-    val density = LocalDensity.current
-    val targetValue = if (isDismissed) -with(density) { containerWidth.toPx() } else 0f
-    val offset by animateFloatAsState(
-        targetValue = targetValue,
-        animationSpec = tween(durationMillis = 300),
-        label = "DismissAnimation"
-    )
-    offset(x = offset.dp)
 }
