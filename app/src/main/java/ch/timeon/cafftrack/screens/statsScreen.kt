@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ch.timeon.cafftrack.viewmodel.CaffeineViewModel
 
 @Composable
-fun StatsScreen(
+fun statsScreen(
     modifier: Modifier = Modifier,
     viewModel: CaffeineViewModel = hiltViewModel()
 ) {

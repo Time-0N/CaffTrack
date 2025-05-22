@@ -18,7 +18,7 @@ import ch.timeon.cafftrack.viewmodel.CaffeineViewModel
 import java.util.*
 
 @Composable
-fun LogScreen(
+fun logScreen(
     modifier: Modifier = Modifier,
     viewModel: CaffeineViewModel = hiltViewModel()
 ) {

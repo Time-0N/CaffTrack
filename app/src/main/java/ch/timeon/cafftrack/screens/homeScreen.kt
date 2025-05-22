@@ -16,7 +16,7 @@ import ch.timeon.cafftrack.model.enums.Sex
 
 
 @Composable
-fun HomeScreen(
+fun homeScreen(
     modifier: Modifier = Modifier,
     viewModel: CaffeineViewModel = hiltViewModel()
 ) {

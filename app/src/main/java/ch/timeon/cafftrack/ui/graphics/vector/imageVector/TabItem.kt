@@ -1,4 +1,4 @@
-package ch.timeon.cafftrack.ui.graphics.vector.ImageVector
+package ch.timeon.cafftrack.ui.graphics.vector.imageVector
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
