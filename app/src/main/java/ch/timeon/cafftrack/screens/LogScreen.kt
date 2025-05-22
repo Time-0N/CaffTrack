@@ -13,7 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import ch.timeon.cafftrack.ui.components.SwipeToDeleteItem
+import ch.timeon.cafftrack.ui.components.swipeToDeleteItem
 import ch.timeon.cafftrack.viewmodel.CaffeineViewModel
 import java.util.*
 
@@ -26,7 +26,7 @@ fun LogScreen(
 
     LazyColumn {
         items(entries, key = { it.id }) { entry ->
-            SwipeToDeleteItem(
+            swipeToDeleteItem(
                 onDelete = { viewModel.delete(entry) }
             ) {
                 ListItem(
