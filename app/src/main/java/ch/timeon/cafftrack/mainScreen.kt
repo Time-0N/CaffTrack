@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import ch.timeon.cafftrack.screens.homeScreen
 import ch.timeon.cafftrack.screens.logScreen
 import ch.timeon.cafftrack.screens.statsScreen
-import ch.timeon.cafftrack.ui.graphics.vector.imageVector.TabItem
+import ch.timeon.cafftrack.ui.navigation.TabItem
 
 
 @Composable
