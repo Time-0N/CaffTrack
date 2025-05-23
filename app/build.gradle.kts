@@ -27,6 +27,17 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "EDAMAM_APP_ID",
+            "\"${props["EDAMAM_APP_ID"] ?: ""}\""
+        )
+        buildConfigField(
+            "String",
+            "EDAMAM_APP_KEY",
+            "\"${props["EDAMAM_APP_KEY"] ?: ""}\""
+        )
     }
 
     buildTypes {
@@ -39,6 +50,10 @@ android {
         }
     }
 
+    buildFeatures {
+        compose     = true
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -76,7 +91,6 @@ kapt {
 
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -100,4 +114,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.mlkit.barcode.scanning)
+    implementation(libs.okhttp)
 }

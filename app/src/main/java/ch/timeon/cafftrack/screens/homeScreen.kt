@@ -1,5 +1,9 @@
 package ch.timeon.cafftrack.screens
 
+import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
@@ -11,8 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.*
+import androidx.compose.ui.platform.LocalContext
 import ch.timeon.cafftrack.model.enums.Sex
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
@@ -24,8 +31,22 @@ fun homeScreen(
     var caffeineMg by remember { mutableStateOf("") }
     var showProfileDialog by remember { mutableStateOf(false) }
     var showEntryDialog by remember { mutableStateOf(false) }
+    var context = LocalContext.current
 
     val caffeineLevel by viewModel.currentCaffeineInBlood.collectAsState()
+    val scanLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        result.data?.getStringExtra("UPC")?.let { upc ->
+            viewModel.lookupAndLog(upc)
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.errorMessages.collectLatest { msg ->
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     // Icon + CaffeineLevel Display
     Column(
@@ -61,6 +82,26 @@ fun homeScreen(
             modifier = Modifier.fillMaxWidth(0.6f)
         ) {
             Text("Add Entry")
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        // BarcodeScanner
+        Button(
+            onClick = {
+                scanLauncher.launch(
+                    Intent(context, BarcodeScannerActivityScreen::class.java)
+                )
+            },
+            modifier = Modifier.fillMaxWidth(0.6f)
+        ) {
+            Icon(
+                imageVector = Icons.Default.QrCodeScanner,
+                contentDescription = "Scan barcode",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text("Scan")
         }
     }
 

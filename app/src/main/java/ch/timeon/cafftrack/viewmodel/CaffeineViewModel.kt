@@ -2,6 +2,7 @@ package ch.timeon.cafftrack.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ch.timeon.cafftrack.model.dto.LookupResult
 import ch.timeon.cafftrack.model.entity.CaffeineEntryEntity
 import ch.timeon.cafftrack.model.entity.UserProfileEntity
 import ch.timeon.cafftrack.model.enums.Sex
@@ -59,7 +60,7 @@ class CaffeineViewModel @Inject constructor(
             }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
-    fun insert(entry: CaffeineEntryEntity) {
+    private fun insert(entry: CaffeineEntryEntity) {
         viewModelScope.launch {
             caffeineRepository.insert(entry)
         }
@@ -88,4 +89,17 @@ class CaffeineViewModel @Inject constructor(
                 }
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), -1.0)
+
+    private val _errorMessages = MutableSharedFlow<String>()
+    val errorMessages = _errorMessages.asSharedFlow()
+
+    fun lookupAndLog(upc: String) {
+        viewModelScope.launch {
+            when ( val result = caffeineRepository.lookupCaffeineFromUpc(upc) ) {
+                is LookupResult.Success -> insert(result.entry)
+                LookupResult.NotFound -> _errorMessages.emit("Product not found")
+                LookupResult.NoCaffeine -> _errorMessages.emit("This product contains no caffeine")
+            }
+        }
+    }
 }
