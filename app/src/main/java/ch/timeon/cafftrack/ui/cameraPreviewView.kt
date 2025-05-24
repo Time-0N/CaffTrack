@@ -1,5 +1,6 @@
 package ch.timeon.cafftrack.ui
 
+import androidx.annotation.OptIn
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.barcode.BarcodeScanning
 
+@OptIn(ExperimentalGetImage::class)
 @Composable
 fun cameraPreviewView(
     modifier: Modifier = Modifier,
